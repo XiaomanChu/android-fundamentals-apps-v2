@@ -24,6 +24,6 @@
 
     <TextView
         android:id="@+id/word"
-        style="@style/word_title" />
+        style="@style/word_title" />  <!-- 使用stytle来批量设定属性 -->
 
 </LinearLayout>

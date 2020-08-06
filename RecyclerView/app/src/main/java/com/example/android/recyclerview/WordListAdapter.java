@@ -28,15 +28,14 @@ import java.util.LinkedList;
 /**
  * Shows how to implement a simple Adapter for a RecyclerView.
  * Demonstrates how to add a click handler for each item in the ViewHolder.
+ * 通过继承RecyclerView.Adapter，来储存viewHolder，viewHolder中储存了TextView
  */
-public class WordListAdapter extends
-        RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
+public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
-    private final LinkedList<String> mWordList;
-    private final LayoutInflater mInflater;
+    private final LinkedList<String> mWordList; //用来定义初始化元素
+    private final LayoutInflater mInflater; //adapter需要渲染xml
 
-    class WordViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {//内部类，继承自RecyclerView.ViewHolder, 同时继承了onClick方法
         public final TextView wordItemView;
         final WordListAdapter mAdapter;
 
@@ -48,9 +47,9 @@ public class WordListAdapter extends
          * @param adapter The adapter that manages the the data and views
          *                for the RecyclerView.
          */
-        public WordViewHolder(View itemView, WordListAdapter adapter) {
-            super(itemView);
-            wordItemView = itemView.findViewById(R.id.word);
+        public WordViewHolder(View itemView, WordListAdapter adapter) { //内部类构造函数
+            super(itemView); //父类RecyclerView.ViewHolder的构造函数
+            wordItemView = itemView.findViewById(R.id.word); //从xml中找到自定义的TextView
             this.mAdapter = adapter;
             itemView.setOnClickListener(this);
         }
@@ -58,20 +57,20 @@ public class WordListAdapter extends
         @Override
         public void onClick(View view) {
             // Get the position of the item that was clicked.
-            int mPosition = getLayoutPosition();
+            int mPosition = this.getLayoutPosition();
 
             // Use that to access the affected item in mWordList.
             String element = mWordList.get(mPosition);
             // Change the word in the mWordList.
 
-            mWordList.set(mPosition, "Clicked! " + element);
+            mWordList.set(mPosition, element + " Clicked! " );
             // Notify the adapter, that the data has changed so it can
             // update the RecyclerView to display the data.
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    public WordListAdapter(Context context, LinkedList<String> wordList) {
+    public WordListAdapter(Context context, LinkedList<String> wordList) { //构造函数, 根据context渲染xml、初始化列表元素
         mInflater = LayoutInflater.from(context);
         this.mWordList = wordList;
     }
@@ -99,8 +98,7 @@ public class WordListAdapter extends
     public WordListAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent,
                                                              int viewType) {
         // Inflate an item view.
-        View mItemView = mInflater.inflate(
-                R.layout.wordlist_item, parent, false);
+        View mItemView = mInflater.inflate(R.layout.wordlist_item, parent, false);
         return new WordViewHolder(mItemView, this);
     }
 
@@ -132,4 +130,5 @@ public class WordListAdapter extends
     public int getItemCount() {
         return mWordList.size();
     }
+
 }

@@ -35,8 +35,8 @@ import java.util.LinkedList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private final LinkedList<String> mWordList = new LinkedList<>();
-
+    private final LinkedList<String> mWordList = new LinkedList<>(); //用于存放RecyclerView每个holder的元素名称
+    private final LinkedList<String> mWordListInit = new LinkedList<>(); //用于Reset到原始状态
     private RecyclerView mRecyclerView;
     private WordListAdapter mAdapter;
 
@@ -65,15 +65,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             mWordList.addLast("Word " + i);
         }
+        mWordListInit.addAll(mWordList); //深拷贝
 
-        // Create recycler view.
-        mRecyclerView = findViewById(R.id.recyclerview);
-        // Create an adapter and supply the data to be displayed.
-        mAdapter = new WordListAdapter(this, mWordList);
-        // Connect the adapter with the recycler view.
-        mRecyclerView.setAdapter(mAdapter);
-        // Give the recycler view a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.resetRecycleViewWithGivenWorldList(mWordList); //初始化
     }
 
     /**
@@ -105,10 +99,26 @@ public class MainActivity extends AppCompatActivity {
         // This comment suppresses the Android Studio warning about simplifying
         // the return statements.
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_reset) {
+            mRecyclerView.removeAllViewsInLayout();
+            mWordList.clear();
+            mWordList.addAll(mWordListInit);
+            this.resetRecycleViewWithGivenWorldList(mWordList);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetRecycleViewWithGivenWorldList(LinkedList<String> wordlist) {
+        // Create recycler view.
+        mRecyclerView = findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        // 创建adapter, 初始化内部wordList
+        mAdapter = new WordListAdapter(this, wordlist);
+        // Connect the adapter with the recycler view.
+        mRecyclerView.setAdapter(mAdapter); //自带的函数
+        // Give the recycler view a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this)); //也是自带的函数
     }
 }

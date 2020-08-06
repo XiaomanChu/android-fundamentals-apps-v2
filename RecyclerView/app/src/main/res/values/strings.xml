@@ -16,5 +16,5 @@
 
 <resources>
     <string name="app_name">RecyclerView</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_reset">Reset</string>
 </resources>
